@@ -1,0 +1,105 @@
+{
+  "agentId": "agent-{{AGENT_NUMBER}}",
+  "priority": "CRITICAL",
+  "messageType": "NEW_TASK_ASSIGNMENT",
+  "timestamp": "{{TIMESTAMP}}",
+  "task": {
+    "title": "{{TASK_TITLE}}",
+    "description": "{{TASK_DESCRIPTION}}",
+    "objective": "{{OBJECTIVE}}",
+    "context": {
+      "projectName": "{{PROJECT_NAME}}",
+      "trackName": "{{TRACK_NAME}}",
+      "strategy": "{{STRATEGY}}",
+      "timeline": "{{TIMELINE}}",
+      "outputLocation": "{{OUTPUT_LOCATION}}"
+    },
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Architecture & Design",
+        "duration": "{{PHASE_1_DURATION}}",
+        "tasks": [
+          "Design system architecture",
+          "Create technical specifications",
+          "Define API contracts and interfaces",
+          "Document data models and schemas",
+          "Create implementation roadmap"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/architecture-design.md"
+      },
+      {
+        "phase": 2,
+        "name": "Core Implementation",
+        "duration": "{{PHASE_2_DURATION}}",
+        "tasks": [
+          "Implement core functionality",
+          "Write production-ready code",
+          "Follow coding standards and best practices",
+          "Add error handling and validation",
+          "Create unit tests"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/{{FEATURE_NAME}}.ts"
+      },
+      {
+        "phase": 3,
+        "name": "Testing & Validation",
+        "duration": "{{PHASE_3_DURATION}}",
+        "tasks": [
+          "Write comprehensive test suite",
+          "Achieve minimum 85% code coverage",
+          "Test edge cases and error scenarios",
+          "Validate against requirements",
+          "Document test results"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/{{FEATURE_NAME}}.test.ts"
+      }
+    ],
+    "successCriteria": {
+      "mustHave": [
+        "Working implementation with all features",
+        "Comprehensive test suite (>85% coverage)",
+        "Clear documentation",
+        "Error handling implemented",
+        "Code follows project standards"
+      ],
+      "quality": {
+        "targetAccuracy": "100% - code must work correctly",
+        "completeness": "All requirements implemented",
+        "documentation": "Clear code comments and README"
+      }
+    },
+    "technicalRequirements": {
+      "examine": [
+        "{{EXISTING_CODEBASE}}",
+        "{{API_DOCUMENTATION}}"
+      ],
+      "createFiles": [
+        "{{DELIVERABLE_PATH}}/{{FEATURE_NAME}}.ts",
+        "{{DELIVERABLE_PATH}}/{{FEATURE_NAME}}.test.ts",
+        "{{DELIVERABLE_PATH}}/README.md"
+      ]
+    },
+    "escalation": {
+      "blockerThreshold": "30 minutes",
+      "escalateTo": "Director (Claude)",
+      "autoEscalateIf": [
+        "Cannot access required APIs or services",
+        "Technical requirements unclear",
+        "Implementation blocked by dependencies"
+      ]
+    },
+    "heartbeat": {
+      "frequency": "Every 5 minutes",
+      "reportTo": "#{{PROJECT_NAME}}-agents",
+      "includeInReport": ["Phase completed", "Code written", "Tests passing", "Blockers"]
+    }
+  },
+  "metadata": {
+    "trackName": "{{TRACK_NAME}}",
+    "estimatedHours": "{{ESTIMATED_HOURS}}",
+    "dependencies": [],
+    "outputFormat": "TypeScript/JavaScript code, tests, documentation"
+  }
+}
+

@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Task Assignment Schema",
+  "description": "Standard schema for assigning tasks to agents in the Ora framework",
+  "type": "object",
+  "required": ["agentId", "priority", "messageType", "timestamp", "task", "metadata"],
+  "properties": {
+    "agentId": {
+      "type": "string",
+      "pattern": "^agent-\\d+(-[a-z0-9-]+)?$",
+      "description": "Unique identifier for the agent (e.g., 'agent-34', 'agent-27-wordpress-core')"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["CRITICAL", "HIGH", "NORMAL", "LOW"],
+      "description": "Task priority level"
+    },
+    "messageType": {
+      "type": "string",
+      "enum": ["NEW_TASK_ASSIGNMENT", "TASK_UPDATE", "TASK_CANCELLATION"],
+      "description": "Type of message"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of task assignment"
+    },
+    "task": {
+      "type": "object",
+      "required": ["title", "description", "objective", "context", "phases", "successCriteria", "technicalRequirements", "escalation", "heartbeat"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Brief, descriptive task title"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the task"
+        },
+        "objective": {
+          "type": "string",
+          "description": "Clear objective statement"
+        },
+        "context": {
+          "type": "object",
+          "required": ["projectName", "trackName", "strategy", "timeline", "outputLocation"],
+          "properties": {
+            "projectName": {
+              "type": "string",
+              "description": "Name of the project (e.g., 'Ora', 'MCP-WP')"
+            },
+            "trackName": {
+              "type": "string",
+              "description": "Track or feature area name"
+            },
+            "strategy": {
+              "type": "string",
+              "description": "Strategic approach to the task"
+            },
+            "timeline": {
+              "type": "string",
+              "description": "Expected timeline (e.g., 'Complete in 15 minutes')"
+            },
+            "outputLocation": {
+              "type": "string",
+              "description": "Path where deliverables should be created"
+            }
+          }
+        },
+        "phases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["phase", "name", "duration", "tasks", "deliverable"],
+            "properties": {
+              "phase": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": {
+                "type": "string"
+              },
+              "duration": {
+                "type": "string",
+                "description": "Expected duration (e.g., '5 minutes')"
+              },
+              "tasks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "deliverable": {
+                "type": "string",
+                "description": "Path to expected deliverable"
+              }
+            }
+          }
+        },
+        "successCriteria": {
+          "type": "object",
+          "required": ["mustHave", "quality"],
+          "properties": {
+            "mustHave": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "quality": {
+              "type": "object",
+              "properties": {
+                "targetAccuracy": {
+                  "type": "string"
+                },
+                "completeness": {
+                  "type": "string"
+                },
+                "documentation": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "technicalRequirements": {
+          "type": "object",
+          "properties": {
+            "examine": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "createFiles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dependencies": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "escalation": {
+          "type": "object",
+          "required": ["blockerThreshold", "escalateTo", "autoEscalateIf"],
+          "properties": {
+            "blockerThreshold": {
+              "type": "string",
+              "description": "Time threshold before escalation (e.g., '30 minutes')"
+            },
+            "escalateTo": {
+              "type": "string",
+              "description": "Who to escalate to (e.g., 'Director (Claude)')"
+            },
+            "autoEscalateIf": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "heartbeat": {
+          "type": "object",
+          "required": ["frequency", "reportTo", "includeInReport"],
+          "properties": {
+            "frequency": {
+              "type": "string",
+              "description": "How often to report (e.g., 'Every 5 minutes')"
+            },
+            "reportTo": {
+              "type": "string",
+              "pattern": "^#[a-z0-9-]+$",
+              "description": "Slack channel to report to (e.g., '#ora-agents')"
+            },
+            "includeInReport": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["trackName", "estimatedHours", "dependencies", "outputFormat"],
+      "properties": {
+        "trackName": {
+          "type": "string"
+        },
+        "estimatedHours": {
+          "type": ["string", "number"],
+          "description": "Estimated hours (can be string like '0.25' or number)"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputFormat": {
+          "type": "string",
+          "description": "Expected output format (e.g., 'JSON templates, bash scripts')"
+        }
+      }
+    }
+  }
+}
+

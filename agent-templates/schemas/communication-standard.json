@@ -1,0 +1,111 @@
+{
+  "title": "Ora Agent Communication Standard",
+  "version": "1.0.0",
+  "description": "Standard communication patterns for Ora framework agents",
+  "fileBasedMessaging": {
+    "outbox": {
+      "path": "agents/_queue/outbox",
+      "description": "Agents write messages here for Slack distribution",
+      "filenameFormat": "msg-{timestamp}-{randomId}.json",
+      "autoProcessed": true
+    },
+    "inbox": {
+      "path": "agents/_queue/inbox",
+      "description": "Director writes tasks here for agents to read",
+      "filenameFormat": "task-{timestamp}-{randomId}.json",
+      "readByAgents": true
+    },
+    "processed": {
+      "path": "agents/_queue/processed",
+      "description": "Completed messages archive",
+      "autoArchived": true
+    },
+    "failed": {
+      "path": "agents/_queue/failed",
+      "description": "Failed messages for debugging",
+      "requiresReview": true
+    }
+  },
+  "messageTypes": {
+    "agentToDirector": {
+      "update": {
+        "description": "General progress update",
+        "priority": "normal",
+        "frequency": "As needed"
+      },
+      "status": {
+        "description": "Status report",
+        "priority": "normal",
+        "frequency": "Periodic"
+      },
+      "milestone": {
+        "description": "Milestone completion",
+        "priority": "high",
+        "frequency": "On completion"
+      },
+      "blocker": {
+        "description": "Blocking issue requiring attention",
+        "priority": "urgent",
+        "frequency": "When blocked"
+      },
+      "question": {
+        "description": "Question for director",
+        "priority": "high",
+        "frequency": "As needed"
+      }
+    },
+    "directorToAgent": {
+      "NEW_TASK_ASSIGNMENT": {
+        "description": "New task assigned to agent",
+        "schema": "task-schema.json"
+      },
+      "TASK_UPDATE": {
+        "description": "Update to existing task",
+        "schema": "task-schema.json"
+      },
+      "TASK_CANCELLATION": {
+        "description": "Task cancelled",
+        "schema": "task-schema.json"
+      }
+    }
+  },
+  "heartbeat": {
+    "frequency": "Every 5 minutes",
+    "channel": "#{PROJECT_NAME}-agents",
+    "requiredFields": [
+      "Phase completed",
+      "Progress status",
+      "Blockers (if any)"
+    ]
+  },
+  "escalation": {
+    "blockerThreshold": "30 minutes",
+    "escalateTo": "Director (Claude)",
+    "autoEscalateConditions": [
+      "Cannot access required resources",
+      "Technical requirements unclear",
+      "Dependencies blocked",
+      "Repeated failures"
+    ]
+  },
+  "validation": {
+    "taskFiles": {
+      "schema": "task-schema.json",
+      "required": true
+    },
+    "heartbeatFiles": {
+      "schema": "heartbeat-schema.json",
+      "required": true
+    }
+  },
+  "slackIntegration": {
+    "channelFormat": "#{PROJECT_NAME}-agents",
+    "messageFormatting": {
+      "update": "📝 {agentId}\n📋 Type: {messageType}\n⏰ {timestamp}\n\n{content}",
+      "milestone": "🎯 {agentId} - Milestone Completed\n⏰ {timestamp}\n\n{content}",
+      "blocker": "🚨 {agentId} - BLOCKER\n⏰ {timestamp}\n\n{content}",
+      "status": "📊 {agentId} - Status Report\n⏰ {timestamp}\n\n{content}"
+    }
+  }
+}
+

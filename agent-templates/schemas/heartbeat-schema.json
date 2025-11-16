@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Heartbeat Message Schema",
+  "description": "Standard schema for agent heartbeat/status updates",
+  "type": "object",
+  "required": ["id", "agentId", "timestamp", "messageType", "priority", "content"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^msg-\\d+-[a-z0-9]+$",
+      "description": "Unique message ID (e.g., 'msg-1763215243000-abc123xyz')"
+    },
+    "agentId": {
+      "type": "string",
+      "pattern": "^agent-\\d+(-[a-z0-9-]+)?$",
+      "description": "Agent identifier"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp"
+    },
+    "messageType": {
+      "type": "string",
+      "enum": ["update", "status", "milestone", "blocker", "question"],
+      "description": "Type of message"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["urgent", "high", "normal", "low"],
+      "description": "Message priority"
+    },
+    "content": {
+      "type": "string",
+      "description": "Message content"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata",
+      "properties": {
+        "phase": {
+          "type": ["string", "integer"],
+          "description": "Current phase"
+        },
+        "filesCreated": {
+          "type": "integer"
+        },
+        "progress": {
+          "type": "string",
+          "description": "Progress indicator (e.g., '60%')"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hoursStuck": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
+

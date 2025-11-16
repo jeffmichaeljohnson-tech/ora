@@ -1,0 +1,91 @@
+{
+  "agentId": "agent-{{AGENT_NUMBER}}",
+  "priority": "HIGH",
+  "messageType": "NEW_TASK_ASSIGNMENT",
+  "timestamp": "{{TIMESTAMP}}",
+  "task": {
+    "title": "{{TASK_TITLE}}",
+    "description": "{{TASK_DESCRIPTION}}",
+    "objective": "{{OBJECTIVE}}",
+    "context": {
+      "projectName": "{{PROJECT_NAME}}",
+      "trackName": "{{TRACK_NAME}}",
+      "strategy": "{{STRATEGY}}",
+      "timeline": "{{TIMELINE}}",
+      "outputLocation": "{{OUTPUT_LOCATION}}"
+    },
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Research Phase",
+        "duration": "{{PHASE_1_DURATION}}",
+        "tasks": [
+          "Conduct deep research on {{RESEARCH_TOPIC}}",
+          "Analyze best practices and competitive landscape",
+          "Document findings with citations and sources",
+          "Create research catalog with categorization",
+          "Identify key patterns and insights"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/research-catalog.md"
+      },
+      {
+        "phase": 2,
+        "name": "Analysis & Synthesis",
+        "duration": "{{PHASE_2_DURATION}}",
+        "tasks": [
+          "Synthesize research findings",
+          "Identify actionable insights",
+          "Create decision framework",
+          "Document recommendations",
+          "Prepare implementation roadmap"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/analysis-report.md"
+      }
+    ],
+    "successCriteria": {
+      "mustHave": [
+        "Comprehensive research catalog with 50+ sources",
+        "Clear categorization of findings",
+        "Actionable insights documented",
+        "Implementation recommendations provided",
+        "All sources properly cited"
+      ],
+      "quality": {
+        "targetAccuracy": "100% - research must be accurate and verifiable",
+        "completeness": "All relevant aspects covered",
+        "documentation": "Clear, organized, and actionable"
+      }
+    },
+    "technicalRequirements": {
+      "examine": [
+        "{{RESEARCH_SOURCES}}"
+      ],
+      "createFiles": [
+        "{{DELIVERABLE_PATH}}/research-catalog.md",
+        "{{DELIVERABLE_PATH}}/analysis-report.md",
+        "{{DELIVERABLE_PATH}}/findings-summary.md"
+      ]
+    },
+    "escalation": {
+      "blockerThreshold": "30 minutes",
+      "escalateTo": "Director (Claude)",
+      "autoEscalateIf": [
+        "Cannot access research sources",
+        "Research findings unclear or contradictory",
+        "Insufficient information available"
+      ]
+    },
+    "heartbeat": {
+      "frequency": "Every 5 minutes",
+      "reportTo": "#{{PROJECT_NAME}}-agents",
+      "includeInReport": ["Phase completed", "Sources analyzed", "Findings documented"]
+    }
+  },
+  "metadata": {
+    "trackName": "{{TRACK_NAME}}",
+    "estimatedHours": "{{ESTIMATED_HOURS}}",
+    "dependencies": [],
+    "outputFormat": "markdown documentation, research catalogs"
+  }
+}
+

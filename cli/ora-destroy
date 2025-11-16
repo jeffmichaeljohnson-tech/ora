@@ -1,0 +1,142 @@
+#!/bin/bash
+# Ora Framework - Project Destruction CLI
+# Safely removes an Ora project and all its resources
+#
+# Usage: ora-destroy <project-name> [--confirm]
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+PROJECT_NAME="${1:-}"
+CONFIRM="${2:-}"
+PROJECTS_DIR="/Users/computer/projects"
+
+show_usage() {
+    cat << EOF
+${RED}Ora Framework - Project Destruction${NC}
+
+${CYAN}Usage:${NC}
+  ora-destroy <project-name> [--confirm]
+
+${CYAN}Warning:${NC}
+  This will permanently delete:
+  - PostgreSQL schema: ora_<project-name>
+  - Project directory: ${PROJECTS_DIR}/<project-name>
+  - GitHub repository (if local clone exists)
+
+${CYAN}Note:${NC}
+  - Pinecone namespace must be cleaned manually
+  - Slack channel must be archived/deleted manually
+  - LangSmith project must be deleted manually
+
+${CYAN}Examples:${NC}
+  ora-destroy my-awesome-project
+  ora-destroy test-project-alpha --confirm
+
+EOF
+}
+
+destroy_postgres_schema() {
+    local schema_name="ora_${PROJECT_NAME}"
+    
+    echo -e "${YELLOW}Dropping PostgreSQL schema: ${schema_name}${NC}"
+    psql -h "${DB_HOST:-localhost}" -p "${DB_PORT:-5432}" -U "${DB_USER:-postgres}" -d "${DB_NAME:-postgres}" \
+        -c "DROP SCHEMA IF EXISTS ${schema_name} CASCADE;" 2>/dev/null || {
+        echo -e "${RED}Failed to drop PostgreSQL schema${NC}"
+        return 1
+    }
+    echo -e "${GREEN}✅ PostgreSQL schema dropped${NC}"
+    return 0
+}
+
+destroy_project_directory() {
+    local project_dir="${PROJECTS_DIR}/${PROJECT_NAME}"
+    
+    if [ -d "$project_dir" ]; then
+        echo -e "${YELLOW}Removing project directory: ${project_dir}${NC}"
+        rm -rf "$project_dir"
+        echo -e "${GREEN}✅ Project directory removed${NC}"
+        return 0
+    else
+        echo -e "${YELLOW}Project directory not found: ${project_dir}${NC}"
+        return 0
+    fi
+}
+
+main() {
+    if [ -z "$PROJECT_NAME" ]; then
+        echo -e "${RED}❌ Error: Project name is required${NC}"
+        echo ""
+        show_usage
+        exit 1
+    fi
+    
+    # Require confirmation unless --confirm flag is provided
+    if [ "$CONFIRM" != "--confirm" ]; then
+        echo ""
+        echo -e "${RED}${'='*80}"
+        echo "  ⚠️  DESTRUCTIVE OPERATION"
+        echo "================================================================================"
+        echo -e "${NC}"
+        echo -e "You are about to destroy project: ${CYAN}${PROJECT_NAME}${NC}"
+        echo ""
+        echo "This will delete:"
+        echo "  - PostgreSQL schema: ora_${PROJECT_NAME}"
+        echo "  - Project directory: ${PROJECTS_DIR}/${PROJECT_NAME}"
+        echo ""
+        echo -e "${YELLOW}This action cannot be undone!${NC}"
+        echo ""
+        read -p "Type the project name to confirm: " confirmation
+        
+        if [ "$confirmation" != "$PROJECT_NAME" ]; then
+            echo -e "${RED}Confirmation failed. Aborted.${NC}"
+            exit 1
+        fi
+    fi
+    
+    echo ""
+    echo -e "${RED}${'='*80}"
+    echo "  DESTROYING PROJECT"
+    echo "================================================================================"
+    echo -e "${NC}"
+    echo -e "Project Name: ${CYAN}${PROJECT_NAME}${NC}"
+    echo -e "Started:      ${CYAN}$(date '+%Y-%m-%d %H:%M:%S')${NC}"
+    echo ""
+    
+    # Destroy resources
+    destroy_postgres_schema
+    destroy_project_directory
+    
+    echo ""
+    echo -e "${RED}${'='*80}"
+    echo "  ⚠️  MANUAL CLEANUP REQUIRED"
+    echo "================================================================================"
+    echo -e "${NC}"
+    echo "The following resources must be cleaned up manually:"
+    echo ""
+    echo "  1. Pinecone namespace: ${PROJECT_NAME}"
+    echo "     - Use Pinecone console or API to delete namespace"
+    echo ""
+    echo "  2. Slack channel: #ora-${PROJECT_NAME}-agents"
+    echo "     - Archive or delete channel in Slack"
+    echo ""
+    echo "  3. LangSmith project: ${PROJECT_NAME}"
+    echo "     - Delete project in LangSmith console"
+    echo ""
+    echo "  4. GitHub repository: ${PROJECT_NAME}"
+    echo "     - Delete repository on GitHub (if created)"
+    echo ""
+    
+    echo -e "${GREEN}✅ Local resources destroyed${NC}"
+    echo ""
+}
+
+main "$@"
+

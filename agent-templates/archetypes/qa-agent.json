@@ -1,0 +1,112 @@
+{
+  "agentId": "agent-{{AGENT_NUMBER}}",
+  "priority": "HIGH",
+  "messageType": "NEW_TASK_ASSIGNMENT",
+  "timestamp": "{{TIMESTAMP}}",
+  "task": {
+    "title": "{{TASK_TITLE}}",
+    "description": "{{TASK_DESCRIPTION}}",
+    "objective": "{{OBJECTIVE}}",
+    "context": {
+      "projectName": "{{PROJECT_NAME}}",
+      "trackName": "{{TRACK_NAME}}",
+      "strategy": "{{STRATEGY}}",
+      "timeline": "{{TIMELINE}}",
+      "outputLocation": "{{OUTPUT_LOCATION}}"
+    },
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Test Planning",
+        "duration": "{{PHASE_1_DURATION}}",
+        "tasks": [
+          "Review requirements and specifications",
+          "Create comprehensive test plan",
+          "Define test scenarios and cases",
+          "Set up test environment",
+          "Document test strategy"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/test-plan.md"
+      },
+      {
+        "phase": 2,
+        "name": "Test Execution",
+        "duration": "{{PHASE_2_DURATION}}",
+        "tasks": [
+          "Execute test cases",
+          "Document test results",
+          "Identify bugs and issues",
+          "Validate against success criteria",
+          "Test edge cases and error scenarios"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/test-results.md"
+      },
+      {
+        "phase": 3,
+        "name": "Quality Validation",
+        "duration": "{{PHASE_3_DURATION}}",
+        "tasks": [
+          "Validate code quality standards",
+          "Check test coverage requirements",
+          "Verify documentation completeness",
+          "Confirm all success criteria met",
+          "Create quality report"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/quality-report.md"
+      }
+    ],
+    "successCriteria": {
+      "mustHave": [
+        "All test cases executed",
+        "Test coverage >85%",
+        "All critical bugs identified and documented",
+        "Quality standards validated",
+        "Clear test reports provided"
+      ],
+      "quality": {
+        "targetAccuracy": "100% - tests must be accurate",
+        "completeness": "All scenarios tested",
+        "documentation": "Clear test reports and bug reports"
+      }
+    },
+    "testScenarios": [
+      {
+        "name": "{{SCENARIO_NAME}}",
+        "command": "{{TEST_COMMAND}}",
+        "expectedOutcome": "{{EXPECTED_OUTCOME}}"
+      }
+    ],
+    "technicalRequirements": {
+      "dependencies": [
+        "{{DEPENDENCIES}}"
+      ],
+      "createFiles": [
+        "{{DELIVERABLE_PATH}}/test-plan.md",
+        "{{DELIVERABLE_PATH}}/test-results.md",
+        "{{DELIVERABLE_PATH}}/quality-report.md",
+        "{{DELIVERABLE_PATH}}/bug-reports.md"
+      ]
+    },
+    "escalation": {
+      "blockerThreshold": "20 minutes",
+      "escalateTo": "Director (Claude)",
+      "autoEscalateIf": [
+        "Tests failing repeatedly",
+        "Cannot access test environment",
+        "Critical bugs blocking progress"
+      ]
+    },
+    "heartbeat": {
+      "frequency": "Every 5 minutes",
+      "reportTo": "#{{PROJECT_NAME}}-agents",
+      "includeInReport": ["Tests completed", "Bugs found", "Quality status"]
+    }
+  },
+  "metadata": {
+    "trackName": "{{TRACK_NAME}}",
+    "estimatedHours": "{{ESTIMATED_HOURS}}",
+    "dependencies": [],
+    "outputFormat": "test reports, quality reports, bug reports"
+  }
+}
+

@@ -1,0 +1,121 @@
+{
+  "agentId": "agent-{{AGENT_NUMBER}}",
+  "priority": "HIGH",
+  "messageType": "NEW_TASK_ASSIGNMENT",
+  "timestamp": "{{TIMESTAMP}}",
+  "task": {
+    "title": "{{TASK_TITLE}}",
+    "description": "{{TASK_DESCRIPTION}}",
+    "objective": "{{OBJECTIVE}}",
+    "context": {
+      "projectName": "{{PROJECT_NAME}}",
+      "trackName": "{{TRACK_NAME}}",
+      "strategy": "{{STRATEGY}}",
+      "timeline": "{{TIMELINE}}",
+      "outputLocation": "{{OUTPUT_LOCATION}}"
+    },
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Documentation Planning",
+        "duration": "{{PHASE_1_DURATION}}",
+        "tasks": [
+          "Review codebase and features",
+          "Identify documentation needs",
+          "Create documentation structure",
+          "Define documentation standards",
+          "Plan user guides and tutorials"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/documentation-plan.md"
+      },
+      {
+        "phase": 2,
+        "name": "Content Creation",
+        "duration": "{{PHASE_2_DURATION}}",
+        "tasks": [
+          "Write comprehensive README",
+          "Create user guides and tutorials",
+          "Document API references",
+          "Write code examples",
+          "Create troubleshooting guides"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/README.md"
+      },
+      {
+        "phase": 3,
+        "name": "Review & Polish",
+        "duration": "{{PHASE_3_DURATION}}",
+        "tasks": [
+          "Review documentation for clarity",
+          "Ensure all examples work",
+          "Verify links and references",
+          "Add visual aids where needed",
+          "Create table of contents"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/QUICKSTART.md"
+      }
+    ],
+    "successCriteria": {
+      "mustHave": [
+        "Complete README with all sections",
+        "User guide enabling <10 minute setup",
+        "API documentation with examples",
+        "Troubleshooting guide",
+        "All code examples tested and working"
+      ],
+      "quality": {
+        "targetAccuracy": "100% - documentation must be accurate",
+        "completeness": "User can start using system with zero questions",
+        "clarity": "Clear, concise, actionable"
+      }
+    },
+    "documentationRequirements": {
+      "README.md": [
+        "What is {{PROJECT_NAME}}? (elevator pitch)",
+        "Key features",
+        "Quick start (3-step process)",
+        "Architecture overview",
+        "Comparison to alternatives",
+        "License and contributing"
+      ],
+      "QUICKSTART.md": [
+        "Prerequisites",
+        "Installation",
+        "Create first {{FEATURE}}",
+        "Deploy first agents",
+        "Review outputs",
+        "Next steps"
+      ]
+    },
+    "technicalRequirements": {
+      "createFiles": [
+        "{{DELIVERABLE_PATH}}/README.md",
+        "{{DELIVERABLE_PATH}}/QUICKSTART.md",
+        "{{DELIVERABLE_PATH}}/ARCHITECTURE.md",
+        "{{DELIVERABLE_PATH}}/API-REFERENCE.md",
+        "{{DELIVERABLE_PATH}}/TROUBLESHOOTING.md"
+      ]
+    },
+    "escalation": {
+      "blockerThreshold": "20 minutes",
+      "escalateTo": "Director (Claude)",
+      "autoEscalateIf": [
+        "Cannot access codebase for documentation",
+        "Documentation requirements unclear",
+        "Examples not working"
+      ]
+    },
+    "heartbeat": {
+      "frequency": "Every 5 minutes",
+      "reportTo": "#{{PROJECT_NAME}}-agents",
+      "includeInReport": ["Documentation written", "Guides created", "Examples tested"]
+    }
+  },
+  "metadata": {
+    "trackName": "{{TRACK_NAME}}",
+    "estimatedHours": "{{ESTIMATED_HOURS}}",
+    "dependencies": [],
+    "outputFormat": "markdown documentation, guides, tutorials"
+  }
+}
+

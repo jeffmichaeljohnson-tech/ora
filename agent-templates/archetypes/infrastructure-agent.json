@@ -1,0 +1,106 @@
+{
+  "agentId": "agent-{{AGENT_NUMBER}}",
+  "priority": "CRITICAL",
+  "messageType": "NEW_TASK_ASSIGNMENT",
+  "timestamp": "{{TIMESTAMP}}",
+  "task": {
+    "title": "{{TASK_TITLE}}",
+    "description": "{{TASK_DESCRIPTION}}",
+    "objective": "{{OBJECTIVE}}",
+    "context": {
+      "projectName": "{{PROJECT_NAME}}",
+      "trackName": "{{TRACK_NAME}}",
+      "strategy": "{{STRATEGY}}",
+      "timeline": "{{TIMELINE}}",
+      "outputLocation": "{{OUTPUT_LOCATION}}"
+    },
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Infrastructure Analysis",
+        "duration": "{{PHASE_1_DURATION}}",
+        "tasks": [
+          "Analyze infrastructure requirements",
+          "Review existing infrastructure patterns",
+          "Design isolation strategy",
+          "Plan service configuration",
+          "Document setup procedures"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/infrastructure-plan.md"
+      },
+      {
+        "phase": 2,
+        "name": "Service Setup",
+        "duration": "{{PHASE_2_DURATION}}",
+        "tasks": [
+          "Create PostgreSQL schema with namespace isolation",
+          "Create Pinecone namespace",
+          "Create Slack channel",
+          "Configure LangSmith project",
+          "Set up GitHub repository"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/{{SERVICE_NAME}}-setup.sh"
+      },
+      {
+        "phase": 3,
+        "name": "Automation & Orchestration",
+        "duration": "{{PHASE_3_DURATION}}",
+        "tasks": [
+          "Create unified setup script",
+          "Build rollback/cleanup scripts",
+          "Add validation and error handling",
+          "Test complete flow",
+          "Document usage"
+        ],
+        "deliverable": "{{DELIVERABLE_PATH}}/setup-all-services.sh"
+      }
+    ],
+    "successCriteria": {
+      "mustHave": [
+        "All services configured with proper isolation",
+        "Unified setup script working",
+        "Rollback scripts functional",
+        "Complete documentation",
+        "Tested with multiple projects"
+      ],
+      "quality": {
+        "targetAccuracy": "100% - infrastructure must work first time",
+        "completeness": "All services configured",
+        "documentation": "Copy-paste ready for new projects"
+      }
+    },
+    "technicalRequirements": {
+      "examine": [
+        "{{EXISTING_INFRASTRUCTURE}}",
+        "{{SERVICE_DOCUMENTATION}}"
+      ],
+      "createFiles": [
+        "{{DELIVERABLE_PATH}}/{{SERVICE_NAME}}-setup.sh",
+        "{{DELIVERABLE_PATH}}/setup-all-services.sh",
+        "{{DELIVERABLE_PATH}}/rollback-cleanup.sh",
+        "{{DELIVERABLE_PATH}}/README.md"
+      ]
+    },
+    "escalation": {
+      "blockerThreshold": "30 minutes",
+      "escalateTo": "Director (Claude)",
+      "autoEscalateIf": [
+        "Cannot access infrastructure services",
+        "Service configuration unclear",
+        "API documentation insufficient"
+      ]
+    },
+    "heartbeat": {
+      "frequency": "Every 5 minutes",
+      "reportTo": "#{{PROJECT_NAME}}-agents",
+      "includeInReport": ["Phase completed", "Services configured", "Scripts created"]
+    }
+  },
+  "metadata": {
+    "trackName": "{{TRACK_NAME}}",
+    "estimatedHours": "{{ESTIMATED_HOURS}}",
+    "dependencies": [],
+    "outputFormat": "bash scripts, SQL templates, markdown docs"
+  }
+}
+
